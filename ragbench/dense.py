@@ -37,7 +37,7 @@ class BgeEncoder:
         revision: str | None = config.DENSE_REVISION,
         device: str | None = None,
         query_prefix: str = config.BGE_QUERY_PREFIX,
-        batch_size: int = 64,
+        batch_size: int | None = None,
     ):
         from sentence_transformers import SentenceTransformer
 
@@ -47,7 +47,8 @@ class BgeEncoder:
         if self.fp16:
             self.model.half()
         self.query_prefix = query_prefix
-        self.batch_size = batch_size
+        # Smaller CPU batches keep peak RAM low (fp32 attention over 512-token docs is memory hungry).
+        self.batch_size = batch_size or (64 if self.fp16 else 16)
         self.name = f"{model_name.split('/')[-1]}-{'fp16' if self.fp16 else 'fp32'}"
 
     def encode(self, texts: list[str], is_query: bool) -> np.ndarray:
