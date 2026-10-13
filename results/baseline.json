@@ -1,0 +1,10 @@
+{
+ "metric": "ndcg@10",
+ "split": "test",
+ "arms": {
+  "bm25": 0.6762,
+  "dense": 0.7127,
+  "hybrid": 0.7267,
+  "rerank": 0.6868
+ }
+}

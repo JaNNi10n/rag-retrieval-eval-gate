@@ -1,0 +1,486 @@
+{
+ "arm": "hybrid",
+ "split": "test",
+ "queries": [
+  {
+   "qid": "1110",
+   "query": "Suboptimal nutrition is not predictive of chronic disease",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "13770184",
+     "title": "Global, regional, and national comparative risk assessment of 79 behavioural, environmental and occupational, and metabolic risks or clusters of risks, 1990\u20132015: a systematic analysis for the Global Burden of Disease Study 2015",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "44624045",
+     "title": "Risk of hospitalization or death from ischemic heart disease among British vegetarians and nonvegetarians: results from the EPIC-Oxford cohort study.",
+     "score": 0.0944,
+     "relevant": false
+    },
+    {
+     "doc_id": "756887",
+     "title": "A comparison of cancer screening practices in cancer survivors and in the general population: the Korean national health and nutrition examination survey (KNHANES) 2001\u20132007",
+     "score": 0.0909,
+     "relevant": false
+    },
+    {
+     "doc_id": "8529693",
+     "title": "Maternal and child undernutrition: consequences for adult health and human capital",
+     "score": 0.0909,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "1175",
+   "query": "The PPR MDA5 has two N-terminal CARD domains.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "31272411",
+     "title": "Immune signaling by RIG-I-like receptors.",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "16058322",
+     "title": "MDA5 and PTPN2, two candidate genes for type 1 diabetes, modify pancreatic \u03b2-cell responses to the viral by-product double-stranded RNA",
+     "score": 0.1678,
+     "relevant": false
+    },
+    {
+     "doc_id": "15419873",
+     "title": "Cytosolic viral sensor RIG-I is a 5'-triphosphate-dependent translocase on double-stranded RNA.",
+     "score": 0.1266,
+     "relevant": false
+    },
+    {
+     "doc_id": "26011884",
+     "title": "Crystal structures of the glutamate receptor ion channel GluK3 and GluK5 amino-terminal domains.",
+     "score": 0.1224,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "1199",
+   "query": "The benefits of colchicine were achieved with effective widespread use of secondary prevention strategies such as high-dose statins.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "16760369",
+     "title": "Comparative determinants of 4-year cardiovascular event rates in stable outpatients at risk of or with atherothrombosis.",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "7454794",
+     "title": "Statins in the primary prevention of cardiovascular disease",
+     "score": 0.1818,
+     "relevant": false
+    },
+    {
+     "doc_id": "21557614",
+     "title": "Pleiotropic effects of statins.",
+     "score": 0.1667,
+     "relevant": false
+    },
+    {
+     "doc_id": "30981192",
+     "title": "How to control residual cardiovascular risk despite statin treatment: focusing on HDL-cholesterol.",
+     "score": 0.1484,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "1213",
+   "query": "The deregulated and prolonged activation of monocytes has deleterious effects in inflammatory diseases.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "14407673",
+     "title": "Myeloid-specific Kr\u00fcppel-like factor 2 inactivation increases macrophage and neutrophil adhesion and promotes atherosclerosis.",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "17934603",
+     "title": "CCR2 and CXCR4 regulate peripheral blood monocyte pharmacodynamics and link to efficacy in experimental autoimmune encephalomyelitis",
+     "score": 0.1667,
+     "relevant": false
+    },
+    {
+     "doc_id": "21498497",
+     "title": "TLR activation triggers the rapid differentiation of monocytes into macrophages and dendritic cells",
+     "score": 0.1187,
+     "relevant": false
+    },
+    {
+     "doc_id": "36444198",
+     "title": "Subpopulations of mouse blood monocytes differ in maturation stage and inflammatory response.",
+     "score": 0.1151,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "1332",
+   "query": "Tumor necrosis factor alpha (TNF-\u03b1) and interleukin-1 (IL-1) are pro-inflammatory cytokines that inhibit IL-6 and IL-10.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "5304891",
+     "title": "Inter-individual variability and genetic influences on cytokine responses to bacteria and fungi",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "39264456",
+     "title": "Impact of TNF-alpha and IL-6 levels on development of cachexia in newly diagnosed NSCLC patients.",
+     "score": 0.1678,
+     "relevant": false
+    },
+    {
+     "doc_id": "36386637",
+     "title": "Effect of interleukin-1 and tumor necrosis factor/cachectin on glucose turnover in the rat.",
+     "score": 0.1458,
+     "relevant": false
+    },
+    {
+     "doc_id": "16488405",
+     "title": "Downloaded from",
+     "score": 0.1154,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "437",
+   "query": "Functional consequences of genomic alterations due to Myelodysplastic syndrome (MDS) are poorly understood due to the lack of an animal model.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "18399038",
+     "title": "Establishment of human iPSC-based models for the study and targeting of glioma initiating cells",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "2359152",
+     "title": "Landscape of genetic lesions in 944 patients with myelodysplastic syndromes",
+     "score": 0.1818,
+     "relevant": false
+    },
+    {
+     "doc_id": "39851630",
+     "title": "Reserves, functional, immunoregulatory, and cytogenetic properties of bone marrow mesenchymal stem cells in patients with myelodysplastic syndromes.",
+     "score": 0.1603,
+     "relevant": false
+    },
+    {
+     "doc_id": "5765455",
+     "title": "Reactive oxygen species, DNA damage, and error-prone repair: a model for genomic instability with progression in myeloid leukemia?",
+     "score": 0.1436,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "502",
+   "query": "Healthcare delivery efficiency in crowded delivery centers is impaired by improving structural, logistical, and interpersonal elements.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "13071728",
+     "title": "The HIV Treatment Gap: Estimates of the Financial Resources Needed versus Available for Scale-Up of Antiretroviral Therapy in 97 Countries from 2015 to 2020",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "70516463",
+     "title": "To err is human. Building a safer health system",
+     "score": 0.1296,
+     "relevant": false
+    },
+    {
+     "doc_id": "13906581",
+     "title": "Patient Outcomes with Teaching Versus Nonteaching Healthcare: A Systematic Review",
+     "score": 0.1085,
+     "relevant": false
+    },
+    {
+     "doc_id": "24318630",
+     "title": "Integration of mental health into primary healthcare in low-income countries: avoiding medicalization.",
+     "score": 0.1076,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "560",
+   "query": "Immune responses result in the development of inflammatory Th17 cells and anti-inflammatory iTregs.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "40096222",
+     "title": "Compromised intestinal epithelial barrier induces adaptive immune compensation that protects from colitis.",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "13798951",
+     "title": "Differentiation of effector CD4 T cell populations (*).",
+     "score": 0.1603,
+     "relevant": false
+    },
+    {
+     "doc_id": "2844490",
+     "title": "Proinflammatory cytokines underlying the inflammation of Crohn's disease.",
+     "score": 0.15,
+     "relevant": false
+    },
+    {
+     "doc_id": "11233339",
+     "title": "Pivotal Roles of T-Helper 17-Related Cytokines, IL-17, IL-22, and IL-23, in Inflammatory Diseases",
+     "score": 0.1269,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "913",
+   "query": "PPAR-RXRs are inhibited by PPAR ligands.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "3203590",
+     "title": "Unique response pathways are established by allosteric interactions among nuclear hormone receptors",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "25328476",
+     "title": "Peroxisome proliferator-activated receptor alpha activation decreases metastatic potential of melanoma cells in vitro via down-regulation of Akt.",
+     "score": 0.1548,
+     "relevant": false
+    },
+    {
+     "doc_id": "712078",
+     "title": "Pharmacological correction of a defect in PPAR\u03b3 signaling ameliorates disease severity in Cftr-deficient mice",
+     "score": 0.1497,
+     "relevant": false
+    },
+    {
+     "doc_id": "25677651",
+     "title": "Activation of liver X receptors and retinoid X receptors prevents bacterial-induced macrophage apoptosis.",
+     "score": 0.1484,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "975",
+   "query": "Primary pro-inflammatory cytokines induce secondary pro- and anti-inflammatory mediators.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "5304891",
+     "title": "Inter-individual variability and genetic influences on cytokine responses to bacteria and fungi",
+     "rank_in_top100": null
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "4454788",
+     "title": "Pro-resolving lipid mediators are leads for resolution physiology",
+     "score": 0.1458,
+     "relevant": false
+    },
+    {
+     "doc_id": "12130690",
+     "title": "Involvement of transient receptor potential vanilloid 1 receptors in protease-activated receptor-2-induced joint inflammation and nociception.",
+     "score": 0.1169,
+     "relevant": false
+    },
+    {
+     "doc_id": "343052",
+     "title": "Curcumin attenuates inflammatory response in IL-1beta-induced human synovial fibroblasts and collagen-induced arthritis in mouse model.",
+     "score": 0.1015,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "834",
+   "query": "NOX2-independent pathways can generate peroxynitrite by reacting with nitrogen intermediates.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "5483793",
+     "title": "Altered recognition of antigen is a mechanism of CD8+ T cell tolerance in cancer",
+     "rank_in_top100": 87
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "23100962",
+     "title": "Nitric oxide synthase generates superoxide and nitric oxide in arginine-depleted cells leading to peroxynitrite-mediated cellular injury.",
+     "score": 0.1742,
+     "relevant": false
+    },
+    {
+     "doc_id": "23122306",
+     "title": "Lung Carcinogenesis by Diesel Exhaust Particles and the Carcinogenic Mechanism Via Active Oxygens.",
+     "score": 0.1364,
+     "relevant": false
+    },
+    {
+     "doc_id": "46328296",
+     "title": "Reduced plasma concentrations of nitrogen oxide in individuals with essential hypertension.",
+     "score": 0.1114,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "716",
+   "query": "Low expression of miR7a exerts a biological function in testis.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "18421962",
+     "title": "Assessing the ceRNA hypothesis with quantitative measurements of miRNA and target abundance.",
+     "rank_in_top100": 82
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "6828370",
+     "title": "A coding-independent function of gene and pseudogene mRNAs regulates tumour biology",
+     "score": 0.1195,
+     "relevant": false
+    },
+    {
+     "doc_id": "13290521",
+     "title": "MicroRNA-7: A miRNA with expanding roles in development and disease.",
+     "score": 0.0909,
+     "relevant": false
+    },
+    {
+     "doc_id": "2000038",
+     "title": "MicroRNAs can generate thresholds in target gene expression",
+     "score": 0.0833,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "421",
+   "query": "Flexible molecules experience greater steric hindrance in the tumor microenviroment than rigid molecules.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "11172205",
+     "title": "Quantum dots spectrally distinguish multiple species within the tumor milieu in vivo",
+     "rank_in_top100": 67
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "1065627",
+     "title": "Microenvironment rigidity modulates responses to the HER2 receptor tyrosine kinase inhibitor lapatinib via YAP and TAZ transcription factors.",
+     "score": 0.1818,
+     "relevant": false
+    },
+    {
+     "doc_id": "39728826",
+     "title": "Use of TLS parameters to model anisotropic displacements in macromolecular refinement.",
+     "score": 0.1012,
+     "relevant": false
+    },
+    {
+     "doc_id": "17388232",
+     "title": "Mechanical regulation of cell function with geometrically modulated elastomeric substrates",
+     "score": 0.0941,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "1191",
+   "query": "The amount of publicly available DNA data doubles every 10 years.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "30655442",
+     "title": "The EMBL nucleotide sequence database.",
+     "rank_in_top100": 60
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "86704258",
+     "title": "Genome downsizing in polyploid plants",
+     "score": 0.0923,
+     "relevant": false
+    },
+    {
+     "doc_id": "10335603",
+     "title": "Long tandem arrays of complex repeat units in Chironomus telomeres.",
+     "score": 0.0909,
+     "relevant": false
+    },
+    {
+     "doc_id": "36355784",
+     "title": "The effect of mass screening on incidence and mortality of squamous and adenocarcinoma of cervix uteri.",
+     "score": 0.0909,
+     "relevant": false
+    }
+   ]
+  },
+  {
+   "qid": "13",
+   "query": "5% of perinatal mortality is due to low birth weight.",
+   "ndcg@10": 0.0,
+   "gold": [
+    {
+     "doc_id": "1606628",
+     "title": "Estimates of global prevalence of childhood underweight in 1990 and 2015.",
+     "rank_in_top100": 60
+    }
+   ],
+   "top3": [
+    {
+     "doc_id": "1263446",
+     "title": "Determinants of neonatal mortality in Indonesia",
+     "score": 0.1742,
+     "relevant": false
+    },
+    {
+     "doc_id": "7662395",
+     "title": "Perinatal mortality in rural China: retrospective cohort study.",
+     "score": 0.1742,
+     "relevant": false
+    },
+    {
+     "doc_id": "8842332",
+     "title": "Contemporary type 1 diabetes pregnancy outcomes: impact of obesity and glycaemic control.",
+     "score": 0.1381,
+     "relevant": false
+    }
+   ]
+  }
+ ]
+}
