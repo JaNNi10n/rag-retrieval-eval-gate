@@ -75,14 +75,18 @@ class DenseIndex:
         self.index.add(self.embeddings)
 
     @staticmethod
-    def cache_stem(encoder: Encoder, doc_ids: list[str], index_dir: Path) -> Path:
-        key = hashlib.sha1("\n".join(doc_ids).encode()).hexdigest()[:12]
+    def cache_stem(encoder: Encoder, doc_ids: list[str], texts: list[str], index_dir: Path) -> Path:
+        # Hash ids AND texts: a change to what gets indexed (e.g. dropping titles) must not reuse stale embeddings.
+        h = hashlib.sha1()
+        for d, t in zip(doc_ids, texts):
+            h.update(f"{d}\t{t}\n".encode())
+        key = h.hexdigest()[:12]
         return Path(index_dir) / f"{encoder.name}-{key}"
 
     @classmethod
     def build_or_load(cls, encoder: Encoder, doc_ids: list[str], texts: list[str], index_dir: Path | None = None) -> DenseIndex:
-        """Reuse <stem>.faiss/.npy when they exist for this exact model + corpus, otherwise encode and save."""
-        stem = cls.cache_stem(encoder, doc_ids, Path(index_dir or config.INDEX_DIR))
+        """Reuse <stem>.faiss/.npy when they exist for this exact model + corpus text, otherwise encode and save."""
+        stem = cls.cache_stem(encoder, doc_ids, texts, Path(index_dir or config.INDEX_DIR))
         # Append (not with_suffix): the stem contains dots ("bge-small-en-v1.5-...") that with_suffix would eat.
         faiss_path, npy_path, ids_path = (stem.parent / f"{stem.name}{s}" for s in (".faiss", ".npy", ".ids.json"))
         if faiss_path.exists() and npy_path.exists() and ids_path.exists():

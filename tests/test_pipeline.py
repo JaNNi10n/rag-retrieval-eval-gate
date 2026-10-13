@@ -47,7 +47,7 @@ def test_pipeline_bm25_only_no_latency(toy_ds, tmp_path):
 
 def test_dense_cache_reused(toy_ds, tmp_path):
     a = DenseIndex.build_or_load(FakeEncoder(), toy_ds.doc_ids, toy_ds.texts, tmp_path)
-    stem = DenseIndex.cache_stem(FakeEncoder(), toy_ds.doc_ids, tmp_path)
+    stem = DenseIndex.cache_stem(FakeEncoder(), toy_ds.doc_ids, toy_ds.texts, tmp_path)
     assert (tmp_path / f"{stem.name}.faiss").exists() and (tmp_path / f"{stem.name}.npy").exists()
     # The model name's dots must survive in the file name (regression: with_suffix truncated "v1.5-fp16-<hash>").
     dotted = FakeEncoder()
@@ -60,6 +60,9 @@ def test_dense_cache_reused(toy_ds, tmp_path):
     assert b.search_batch([]) == []
     with pytest.raises(ValueError):
         DenseIndex(FakeEncoder(), ["a"], np.zeros((2, 4), dtype=np.float32))
+    # Same ids but different text (e.g. titles dropped) must map to a different cache entry, not stale vectors.
+    no_titles = [toy_ds.docs[d].split(" ", 3)[-1] for d in toy_ds.doc_ids]
+    assert DenseIndex.cache_stem(FakeEncoder(), toy_ds.doc_ids, no_titles, tmp_path) != stem
 
 
 def test_helpers(tmp_path):
