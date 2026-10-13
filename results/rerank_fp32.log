@@ -1,0 +1,11 @@
+[data] 5183 docs, 300 test queries (0.1s)
+C:\Users\dlprw\AppData\Roaming\Python\Python312\site-packages\transformers\models\bert\modeling_bert.py:440: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:455.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+[dense] index ready in 0.04s
+[hybrid] RRF k tuned on train: {10: 0.760109873785094, 30: 0.7541049307648822, 60: 0.7515919782751525, 100: 0.7507788141738606} -> k=10
+[rerank] 300 queries x 100 candidates in 250.44s
+[bm25] ndcg@10=0.6762, recall@100=0.9127, mrr@10=0.6413
+[hybrid] ndcg@10=0.7267, recall@100=0.9650, mrr@10=0.6904
+[rerank] ndcg@10=0.6868, recall@100=0.9650, mrr@10=0.6575
+{'bm25': 0.6762, 'hybrid': 0.7267, 'rerank': 0.6868}
+exit=0
