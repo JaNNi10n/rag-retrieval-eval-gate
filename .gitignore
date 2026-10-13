@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_tmp/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Downloaded data and derived indexes (re-created by `python -m ragbench run`)
+data/
+indexes/
+ci_results/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

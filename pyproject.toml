@@ -1,0 +1,24 @@
+[project]
+name = "ragbench"
+version = "1.0.0"
+description = "BM25 vs dense vs hybrid (RRF) vs cross-encoder re-ranking on BEIR SciFact, with significance tests, latency and a CI regression gate."
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Shivansh Bhardwaj" }]
+
+[tool.ruff]
+line-length = 160
+target-version = "py310"
+extend-exclude = [".venv", "data", "indexes"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B008", "B905"]  # FastAPI Query(...) defaults; zip lengths are equal by construction
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider --basetemp=.pytest_tmp"
+filterwarnings = ["ignore::DeprecationWarning", "ignore::RuntimeWarning", "ignore::UserWarning"]
+
+[tool.coverage.run]
+source = ["ragbench"]
