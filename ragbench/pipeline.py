@@ -14,7 +14,7 @@ from .dense import DenseIndex, Encoder
 from .errors import dump
 from .evaluate import mean_scores, per_query_scores, save_run, significance
 from .hybrid import fuse_runs, tune_k
-from .latency import measure
+from .latency import measure_interleaved
 from .rerank import PairScorer, rerank
 from .search import Searcher
 
@@ -166,6 +166,7 @@ def run(
         "timings": timings,
         "arms": {},
     }
+    lat = measure_interleaved({a: (lambda q, a=a: searcher.search(q, a, 10)) for a in arms}, qtexts, warmup=warmup) if latency else {}
     per_query_all = {}
     for arm in arms:
         pq = per_query_scores(runs[arm], qrels)
@@ -176,7 +177,7 @@ def run(
         if arm in vs_dense:
             entry["vs_dense"] = vs_dense[arm]
         if latency:
-            entry["latency"] = measure(lambda q, a=arm: searcher.search(q, a, 10), qtexts, warmup=warmup)
+            entry["latency"] = lat[arm]
         results["arms"][arm] = entry
         lat_txt = f", p50={entry['latency']['p50_ms']}ms p95={entry['latency']['p95_ms']}ms" if latency else ""
         log(f"[{arm}] " + ", ".join(f"{m}={entry[m]:.4f}" for m in config.METRICS) + lat_txt)

@@ -5,7 +5,7 @@ import pytest
 
 from ragbench.data import read_qrels
 from ragbench.dense import DenseIndex, l2_normalise
-from ragbench.latency import measure
+from ragbench.latency import measure, measure_interleaved
 from ragbench.pipeline import fmt_p, run
 from ragbench.rerank import rerank
 
@@ -75,3 +75,11 @@ def test_helpers(tmp_path):
     assert fmt_p(0.0) == "<1e-04 *" and fmt_p(0.3) == "0.3"
     (tmp_path / "q.tsv").write_text("query-id\tcorpus-id\tscore\n1\t10\t1\n1\t11\t1\n2\t10\t1\n")
     assert read_qrels(tmp_path / "q.tsv") == {"1": {"10": 1, "11": 1}, "2": {"10": 1}}
+
+
+def test_measure_interleaved_rotates_arm_order():
+    calls = []
+    stats = measure_interleaved({"a": lambda q: calls.append(("a", q)), "b": lambda q: calls.append(("b", q))}, ["q1", "q2", "q3"], warmup=1)
+    assert set(stats) == {"a", "b"} and stats["a"]["n"] == stats["b"]["n"] == 3 and stats["a"]["warmup"] == 1
+    timed = calls[2:]  # first two calls are the warm-up of q1 for both arms
+    assert [c[0] for c in timed] == ["a", "b", "b", "a", "a", "b"]  # order rotates per query
