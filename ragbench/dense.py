@@ -49,7 +49,8 @@ class BgeEncoder:
         self.query_prefix = query_prefix
         # Smaller CPU batches keep peak RAM low (fp32 attention over 512-token docs is memory hungry).
         self.batch_size = batch_size or (64 if self.fp16 else 16)
-        self.name = f"{model_name.split('/')[-1]}-{'fp16' if self.fp16 else 'fp32'}"
+        # Everything that changes document vectors goes into the name, which keys the on-disk index cache.
+        self.name = f"{model_name.split('/')[-1]}-{'fp16' if self.fp16 else 'fp32'}-len{self.model.max_seq_length}"
 
     def encode(self, texts: list[str], is_query: bool) -> np.ndarray:
         if is_query:
