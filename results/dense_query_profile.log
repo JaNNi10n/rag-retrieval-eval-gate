@@ -1,0 +1,9 @@
+device: cuda (NVIDIA GeForce RTX 3050 Ti Laptop GPU), fp16=True
+raw HF forward pass   : p50 40.42 ms, p95 56.02 ms (n=100)
+BgeEncoder.encode([q]): p50 49.54 ms, p95 63.99 ms (n=100)
+other GPU compute processes at the time:
+2324, C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
+25328, C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
+14040, E:\tools\ollama\bin\lib\ollama\llama-server.exe
+25308, C:\Users\dlprw\AppData\Local\Programs\Python\Python312\python.exe
+11736, C:\Users\dlprw\AppData\Local\Programs\Python\Python312\python.exe

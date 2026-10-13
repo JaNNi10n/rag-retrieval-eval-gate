@@ -1,0 +1,94 @@
+{
+ "endpoint": "GET /search",
+ "k": 10,
+ "n_queries": 300,
+ "warmup": 10,
+ "health": {
+  "status": "ok",
+  "arms": [
+   "bm25",
+   "dense",
+   "hybrid",
+   "rerank"
+  ],
+  "n_docs": 5183,
+  "device": "cuda",
+  "rrf_k": 10
+ },
+ "arms": {
+  "bm25": {
+   "round_trip": {
+    "p50_ms": 12.64,
+    "p95_ms": 22.51,
+    "mean_ms": 13.65
+   },
+   "server_latency_ms": {
+    "p50_ms": 5.61,
+    "p95_ms": 10.38,
+    "mean_ms": 6.14
+   }
+  },
+  "dense": {
+   "round_trip": {
+    "p50_ms": 109.34,
+    "p95_ms": 162.16,
+    "mean_ms": 111.8
+   },
+   "server_latency_ms": {
+    "p50_ms": 102.74,
+    "p95_ms": 150.44,
+    "mean_ms": 104.22
+   }
+  },
+  "hybrid": {
+   "round_trip": {
+    "p50_ms": 113.95,
+    "p95_ms": 170.08,
+    "mean_ms": 118.61
+   },
+   "server_latency_ms": {
+    "p50_ms": 106.67,
+    "p95_ms": 159.33,
+    "mean_ms": 111.05
+   }
+  },
+  "rerank": {
+   "round_trip": {
+    "p50_ms": 677.64,
+    "p95_ms": 841.18,
+    "mean_ms": 655.11
+   },
+   "server_latency_ms": {
+    "p50_ms": 669.56,
+    "p95_ms": 832.19,
+    "mean_ms": 647.34
+   }
+  }
+ },
+ "sample_response": {
+  "query": "0-dimensional biomaterials show inductive properties.",
+  "arm": "hybrid",
+  "k": 3,
+  "results": [
+   {
+    "doc_id": "43385013",
+    "title": "Epithelial and mesenchymal subpopulations within normal basal breast cell lines exhibit distinct stem cell/progenitor properties.",
+    "score": 0.12179487179487179,
+    "rank": 1
+   },
+   {
+    "doc_id": "21456232",
+    "title": "A graphene-based platform for induced pluripotent stem cells culture and differentiation.",
+    "score": 0.0936936936936937,
+    "rank": 2
+   },
+   {
+    "doc_id": "34386619",
+    "title": "The first gene of the Bacillus subtilis clpC operon, ctsR, encodes a negative regulator of its own operon and other class III heat shock genes.",
+    "score": 0.09090909090909091,
+    "rank": 3
+   }
+  ],
+  "latency_ms": 95.706
+ }
+}

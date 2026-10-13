@@ -1,0 +1,30 @@
+$ ruff check .
+All checks passed!
+exit=0
+$ pytest -q --cov=ragbench --cov-report=term-missing --cov-fail-under=80
+..................................                                       [100%]
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                   Stmts   Miss  Cover   Missing
+----------------------------------------------------
+ragbench\__init__.py       1      0   100%
+ragbench\__main__.py      50      7    86%   18, 45-50, 67
+ragbench\api.py           53      2    96%   44-45
+ragbench\bm25.py          23      0   100%
+ragbench\config.py        36      1    97%   50
+ragbench\data.py          49     22    55%   40-46, 50-68
+ragbench\dense.py         73     13    82%   42-53, 56-65
+ragbench\errors.py        32      1    97%   20
+ragbench\evaluate.py      33      0   100%
+ragbench\gate.py          31      0   100%
+ragbench\hybrid.py        20      0   100%
+ragbench\latency.py       24      0   100%
+ragbench\pipeline.py     118      4    97%   115-117, 136-138
+ragbench\rerank.py        22      8    64%   25-31, 34-35
+ragbench\search.py        54     18    67%   18-22, 65-78
+----------------------------------------------------
+TOTAL                    619     76    88%
+Required test coverage of 80% reached. Total coverage: 87.72%
+34 passed in 108.50s (0:01:48)
+exit=0

@@ -1,0 +1,7 @@
+C:\Users\dlprw\AppData\Roaming\Python\Python312\site-packages\transformers\models\bert\modeling_bert.py:440: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:455.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+bm25 {'round_trip': {'p50_ms': 12.64, 'p95_ms': 22.51, 'mean_ms': 13.65}, 'server_latency_ms': {'p50_ms': 5.61, 'p95_ms': 10.38, 'mean_ms': 6.14}}
+dense {'round_trip': {'p50_ms': 109.34, 'p95_ms': 162.16, 'mean_ms': 111.8}, 'server_latency_ms': {'p50_ms': 102.74, 'p95_ms': 150.44, 'mean_ms': 104.22}}
+hybrid {'round_trip': {'p50_ms': 113.95, 'p95_ms': 170.08, 'mean_ms': 118.61}, 'server_latency_ms': {'p50_ms': 106.67, 'p95_ms': 159.33, 'mean_ms': 111.05}}
+rerank {'round_trip': {'p50_ms': 677.64, 'p95_ms': 841.18, 'mean_ms': 655.11}, 'server_latency_ms': {'p50_ms': 669.56, 'p95_ms': 832.19, 'mean_ms': 647.34}}
+exit=0
