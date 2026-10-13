@@ -8,7 +8,7 @@ on:
 jobs:
   lint-test-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 180  # a cold-cache CPU encode of 5,183 docs is slow; see README "CPU check"
     env:
       RAGBENCH_DEVICE: cpu
     steps:

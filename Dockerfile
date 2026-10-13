@@ -24,6 +24,6 @@ RUN useradd --create-home --uid 10001 app && mkdir -p /home/app/data /home/app/i
 USER app
 
 EXPOSE 8000
-# First start downloads SciFact + bge-small and encodes 5,183 docs on CPU (a few minutes); mount
-# /home/app to keep them between runs.
+# First start downloads SciFact + bge-small and encodes 5,183 docs on CPU. That is slow (about 1 doc/s measured on
+# the author's busy laptop CPU, results/cpu_encode_probe.log), so mount /home/app to keep the index between runs.
 CMD ["uvicorn", "ragbench.api:app", "--host", "0.0.0.0", "--port", "8000"]

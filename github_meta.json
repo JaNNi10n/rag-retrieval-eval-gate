@@ -1,0 +1,19 @@
+{
+ "description": "BM25 vs dense vs hybrid RRF vs cross-encoder on BEIR SciFact: significance tests, latency, FastAPI and a CI eval gate",
+ "topics": [
+  "rag",
+  "information-retrieval",
+  "hybrid-search",
+  "reranking",
+  "faiss",
+  "bm25",
+  "evaluation",
+  "fastapi"
+ ],
+ "homepage": "",
+ "release": {
+  "tag": "v1.0.0",
+  "title": "v1.0.0: SciFact retrieval benchmark and CI regression gate",
+  "notes": "First release.\n\n- Four retrieval arms on BEIR SciFact (5,183 docs, 300 test queries): BM25 (bm25s), dense (bge-small-en-v1.5 + FAISS), hybrid (RRF, k tuned on train), and cross-encoder re-ranking (ms-marco-MiniLM-L-6-v2).\n- ranx metrics (nDCG@10, Recall@100, MRR@10), per-query runs, paired t-test and Fisher randomisation vs BM25.\n- Measured on an RTX 3050 Ti laptop: hybrid nDCG@10 0.7267 vs BM25 0.6762 (p < 1e-4); the re-ranker scores 0.6868 and does not beat hybrid on SciFact. See README for the full table and latency.\n- `python -m ragbench gate` fails CI when nDCG@10 drops more than 0.02 below the committed baseline; a demo branch that truncates documents to 128 tokens is shown failing it (dense -0.032). Dropping the bge query prefix does NOT fail it: on SciFact the prefix slightly hurts (0.7200 without vs 0.7127 with).\n- FastAPI `/search` + `/health`, CPU Dockerfile, pytest suite, GitHub Actions workflow."
+ }
+}
