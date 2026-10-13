@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-test-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RAGBENCH_DEVICE: cpu
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install (CPU torch + pinned deps)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch==2.3.1 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Pytest (coverage >= 80% on ragbench/)
+        run: pytest -q --cov=ragbench --cov-report=term-missing --cov-fail-under=80
+
+      - name: Cache HF models, SciFact and dense index
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            data
+            indexes
+          key: hf-scifact-${{ hashFiles('ragbench/config.py', 'ragbench/data.py', 'ragbench/dense.py') }}
+
+      # The reranker arm is local-only (GPU); CI gates BM25 + dense on CPU.
+      - name: Evaluate BM25 + dense on SciFact test (CPU)
+        run: python -m ragbench run --arms bm25,dense --split test --out ci_results --runs-dir ci_results/runs --no-latency
+
+      - name: Regression gate (nDCG@10, tol 0.02)
+        run: python -m ragbench gate --baseline results/baseline.json --results ci_results/results.json --arms bm25,dense --tol 0.02
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-results
+          path: ci_results/
