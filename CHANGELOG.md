@@ -21,4 +21,6 @@ All notable changes to this project are documented here. The format follows [Kee
   load from other processes on a shared GPU affects every arm equally.
 - Ablations with saved logs: re-ranker in fp32, bge-small in fp32 (the CI precision), with and without the bge query
   prefix, and three deliberately broken `demo/*` branches run through the gate.
-
+- Independent re-run from a fresh venv, fresh data download and fresh corpus encode (`results/rerun/`): quality
+  numbers and `runs/*.json` reproduced byte for byte; latency differed a lot because the GPU was shared, and the README
+  now reports both runs.

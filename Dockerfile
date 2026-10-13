@@ -1,4 +1,4 @@
-# CPU-only image for the /search API. The reranker arm is off by default (it is ~10x slower than hybrid even on GPU).
+# CPU-only image for the /search API. The reranker arm is off by default (it was 6-14x slower than hybrid at p50 even on GPU).
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

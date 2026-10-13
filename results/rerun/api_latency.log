@@ -1,0 +1,10 @@
+$ python scripts/bench_api.py --arms bm25,dense,hybrid,rerank --out <scratch>/api_latency.json
+bm25 {'round_trip': {'p50_ms': 3.57, 'p95_ms': 4.55, 'mean_ms': 3.69}, 'server_latency_ms': {'p50_ms': 1.64, 'p95_ms': 2.09, 'mean_ms': 1.7}}
+dense {'round_trip': {'p50_ms': 29.24, 'p95_ms': 69.12, 'mean_ms': 33.53}, 'server_latency_ms': {'p50_ms': 27.09, 'p95_ms': 66.99, 'mean_ms': 31.35}}
+hybrid {'round_trip': {'p50_ms': 33.4, 'p95_ms': 71.46, 'mean_ms': 37.18}, 'server_latency_ms': {'p50_ms': 31.27, 'p95_ms': 68.85, 'mean_ms': 34.93}}
+rerank {'round_trip': {'p50_ms': 449.28, 'p95_ms': 616.1, 'mean_ms': 455.07}, 'server_latency_ms': {'p50_ms': 447.08, 'p95_ms': 614.04, 'mean_ms': 452.78}}
+exit=0
+GPU at start of the benchmark (nvidia-smi; utilization, memory used, other compute processes):
+96 %, 3143 MiB
+14040, llama-server.exe
+18368, python.exe

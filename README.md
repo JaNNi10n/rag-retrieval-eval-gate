@@ -21,7 +21,8 @@ small code change (a missing query prefix, a new tokenizer) silently made retrie
 - Times each arm per query (p50 / p95) on this laptop's CPU and GPU.
 - Dumps the 15 hardest queries for the best arm and categorises them by hand in [ERRORS.md](ERRORS.md).
 - Exposes the arms as `GET /search` (FastAPI) and ships a **regression gate**: `python -m ragbench gate` exits non-zero
-  when any arm's nDCG@10 falls more than 0.02 below the committed baseline. GitHub Actions runs it on every push/PR.
+  when any arm's nDCG@10 falls more than 0.02 below the committed baseline. A GitHub Actions workflow is set up to run it
+  on every push/PR (it has not run on GitHub yet; see [Limitations](#limitations-and-next-steps)).
 
 ## Demo
 
@@ -219,8 +220,24 @@ test split, all 300 queries, full 5,183-doc corpus** (nothing subsampled). RRF k
 `*` = significant at p < 0.05 (paired over the 300 queries; Fisher randomisation with 10,000 permutations, seed 42).
 Latency = wall-clock of one `Searcher.search(q, arm, k=10)` call, batch size 1, measured over all 300 test queries after
 10 untimed warm-up queries per arm. The arms are timed **interleaved** (for each query every arm runs once, in an order
-that rotates per query), so load from other processes hits all arms equally. Re-rank latency is **5.9x hybrid at p50
-and 5.3x at p95**.
+that rotates per query), so load from other processes hits all arms equally. In this run re-rank latency is **5.9x
+hybrid at p50 and 5.3x at p95**.
+
+**Latency depends heavily on what else is using the GPU.** An independent re-run later the same day (fresh venv, fresh
+SciFact download, fresh corpus encode; [results/rerun/](results/rerun/)) reproduced every quality number and every
+`runs/*.json` file byte for byte ([compare_and_gate.log](results/rerun/compare_and_gate.log)), but the latencies were
+very different, with the GPU again shared with an Ollama server and another Python job:
+
+| Arm | run 1 p50 / p95 ms ([results.json](results/results.json)) | re-run p50 / p95 ms ([rerun/results.json](results/rerun/results.json)) |
+|---|---|---|
+| BM25 | 6.35 / 12.46 | 1.69 / 2.18 |
+| Dense | 113.39 / 150.68 | 28.49 / 45.80 |
+| Hybrid | 123.91 / 162.40 | 31.57 / 49.30 |
+| Re-rank | 732.46 / 866.03 | 437.82 / 560.56 |
+| Re-rank / hybrid | 5.9x / 5.3x | 13.9x / 11.4x |
+
+Neither run had the machine to itself, so read the absolute numbers as "what this laptop did under load", not as a
+benchmark of the models. The ordering of the arms is the same in both runs.
 
 **Through the API.** [scripts/bench_api.py](scripts/bench_api.py) starts a real uvicorn server, sends 10 warm-up
 queries per arm and then all 300 test queries over HTTP (arms interleaved), and records the server-side `latency_ms`
@@ -233,12 +250,22 @@ and the client round-trip ([results/api_latency.json](results/api_latency.json))
 | hybrid | 106.67 | 159.33 | 113.95 | 170.08 |
 | rerank | 669.56 | 832.19 | 677.64 | 841.18 |
 
-**Why the GPU arms are slower than a bge-small forward pass should be.** During every latency run the 4 GB GPU was
-also used by a local Ollama LLM server and another Python evaluation job. To check that the time is the GPU and not
-ragbench code, [scripts/profile_dense_query.py](scripts/profile_dense_query.py) timed the raw Hugging Face forward
-pass for one query against the full `BgeEncoder.encode` call ([results/dense_query_profile.log](results/dense_query_profile.log)):
-p50 40.4 ms vs 49.5 ms. Most of the cost is the contended forward pass itself, so treat the GPU numbers as an upper
-bound for this laptop, and compare arms by their ratios (all arms were timed in the same windows).
+The same benchmark in the re-run ([results/rerun/api_latency.json](results/rerun/api_latency.json); the log records
+the GPU at 96% utilisation from other processes when it started):
+
+| Arm | server p50 ms | server p95 ms | round-trip p50 ms | round-trip p95 ms |
+|---|---|---|---|---|
+| bm25 | 1.64 | 2.09 | 3.57 | 4.55 |
+| dense | 27.09 | 66.99 | 29.24 | 69.12 |
+| hybrid | 31.27 | 68.85 | 33.40 | 71.46 |
+| rerank | 447.08 | 614.04 | 449.28 | 616.10 |
+
+**Where single-query dense time goes.** [scripts/profile_dense_query.py](scripts/profile_dense_query.py) timed, in a
+separate session, the raw Hugging Face forward pass for one query against the full `BgeEncoder.encode` call
+([results/dense_query_profile.log](results/dense_query_profile.log)): p50 40.4 ms vs 49.5 ms. So the transformer
+forward pass is most of the encode cost, and the rest of the dense arm (FAISS exact search over 5,183 vectors) is
+small. The spread between 28 ms and 113 ms p50 across sessions is GPU contention, not ragbench code; compare arms
+within one run, where they were timed in the same windows.
 
 ### Against the targets I set before running
 
@@ -248,23 +275,23 @@ bound for this laptop, and compare arms by their ratios (all arms were timed in 
 | Dense bge-small nDCG@10 >= 0.70 (MTEB reports about 0.72) | 0.7127 | yes |
 | Best arm beats BM25 by >= 5 nDCG@10 points, paired p < 0.05 | hybrid +5.05 points, p = 1.7e-06 (t), < 1e-04 (Fisher) | yes, narrowly |
 | Hybrid Recall@100 >= 0.90 | 0.9650 | yes |
-| p50/p95 per arm + re-rank multiplier vs hybrid | table above; 5.9x (p50), 5.3x (p95) | reported (below the 10-50x I expected; see the latency note) |
+| p50/p95 per arm + re-rank multiplier vs hybrid | tables above; 5.9x / 5.3x (p50 / p95) in run 1, 13.9x / 11.4x in the re-run | reported (the 10-50x I expected only in the re-run; it depends on GPU load) |
 | CI gate green on main; broken change fails it | Gate passes on `main` ([results/gate_main.log](results/gate_main.log)); the 128-token truncation branch fails it, dense -0.032 ([log](results/gate_demo_truncate128/gate.log)). Dropping the query prefix does **not** fail it. Verified locally only: the repo is not on GitHub yet, so no Actions run exists | partly |
 | Tests pass, >= 80% line coverage on `ragbench/` | ruff clean; 34 passed, 87.7% line coverage ([results/pytest.log](results/pytest.log)) | yes |
-| `/search` p95 < 100 ms for the dense arm on GPU | server p95 150.4 ms, round-trip p95 162.2 ms, on a GPU shared with other jobs | **no** |
+| `/search` p95 < 100 ms for the dense arm on GPU | run 1: server p95 150.4 ms, round-trip 162.2 ms; re-run: server p95 67.0 ms, round-trip 69.1 ms. GPU shared with other jobs both times | **not reliably**: missed in run 1, met in the re-run |
 
 ### Does hybrid or re-ranking beat dense alone? (honest answer)
 
 - **Hybrid vs dense:** +0.014 nDCG@10 and +0.023 Recall@100, but the paired difference is **not significant**
   (t-test p = 0.19, Fisher p = 0.19). Hybrid is significantly better than BM25; against dense it is a small, unproven gain.
-- **Re-rank vs dense:** the re-ranker is **worse** (0.6868 vs 0.7127; p = 0.078 / 0.076, not significant) and about 6x slower than
-  hybrid. This matches the BEIR paper, where BM25 + the same family of MS MARCO cross-encoder reaches about 0.688 on
+- **Re-rank vs dense:** the re-ranker is **worse** (0.6868 vs 0.7127; p = 0.078 / 0.076, not significant) and 6-14x slower than
+  hybrid at p50, depending on GPU load. This matches the BEIR paper, where BM25 + the same family of MS MARCO cross-encoder reaches about 0.688 on
   SciFact: a re-ranker trained on short web queries does not transfer well to scientific claims.
   To rule out fp16 as the cause I re-ran the re-ranker in fp32 on the same GPU
   ([results/rerank_fp32/results.json](results/rerank_fp32/results.json)): nDCG@10 is 0.6868 again (to 4 decimals),
   so the drop comes from the model, not the precision.
-- **What I would ship for SciFact-like data:** hybrid RRF. It is the best arm, costs about the same as dense alone (BM25
-  adds about 6 ms p50 on CPU), and it raises Recall@100 to 0.965, which is what a downstream LLM reader needs.
+- **What I would ship for SciFact-like data:** hybrid RRF. It is the best arm, costs about the same as dense alone (hybrid
+  p50 was 3-11 ms above dense in the runs above), and it raises Recall@100 to 0.965, which is what a downstream LLM reader needs.
 
 ### RRF k tuning (train split only, [results/rrf_tuning.json](results/rrf_tuning.json))
 
@@ -315,14 +342,15 @@ Design decisions, in the order the data flows. Each one is a choice I can defend
 2. **BM25 (`bm25.py`).** `bm25s` with lowercasing, an English stopword list and the Snowball stemmer, `k1 = 0.9, b = 0.4`
    (Anserini's defaults, which the BEIR reference numbers use). Documents with score 0 share no query term and are
    dropped rather than returned as padding. bm25s was chosen over rank_bm25 because it precomputes a sparse score
-   matrix at index time; a query costs a few ms (p50 6.35 ms measured here, on a busy CPU).
+   matrix at index time; a query costs a few ms (p50 6.35 ms in run 1 and 1.69 ms in the re-run, on a shared CPU).
 3. **Dense (`dense.py`).** bge-small-en-v1.5 (33M parameters, 384-d) is small enough for a 4 GB laptop GPU. bge-v1.5
    is trained with an **instruction prefix on queries only** ("Represent this sentence for searching relevant
    passages: "), so the prefix is added to queries and never to documents. Embeddings are L2-normalised, so inner
    product equals cosine, and `faiss.IndexFlatIP` gives **exact** search. With 5k vectors an approximate index (HNSW,
    IVF) would add recall loss and tuning for no speed benefit. On CUDA the model runs in fp16 (half the memory, faster);
    vectors are re-normalised in fp32 afterwards. The index and embeddings are saved as `.faiss` + `.npy`, keyed by
-   model name, precision and a hash of the doc ids, so they are reused across runs and never mixed up.
+   model name, precision, max sequence length and a hash of the doc ids and texts, so they are reused across runs and a
+   change to what gets indexed (e.g. dropping titles) cannot silently reuse stale vectors.
 4. **Hybrid (`hybrid.py`).** BM25 scores are unbounded and cosine scores live in [-1, 1], so adding raw scores needs
    normalisation choices that are easy to get wrong. **Reciprocal Rank Fusion** uses ranks only:
    `score(d) = sum over lists of 1 / (k + rank)`. A document missing from one list just gets no contribution from it.
@@ -343,14 +371,16 @@ Design decisions, in the order the data flows. Each one is a choice I can defend
    first (CUDA kernels, caches), then every test query once; p50 and p95 because tail latency is what users notice.
 9. **Gate (`gate.py`, CLI `gate`).** `results/baseline.json` stores the frozen nDCG@10 per arm. The gate fails if any
    gated arm is more than `tol` (0.02) below its baseline, or missing from the results. The tolerance absorbs harmless
-   noise such as fp16 on GPU vs fp32 on the CPU CI runner, but catches real regressions.
+   noise such as fp16 on GPU vs fp32 on the CPU CI runner. It catches large regressions (128-token truncation, dense
+   -0.032) but not every real one: dropping titles (-0.016 per arm) passes. See the gate section above.
 10. **CI (`.github/workflows/ci.yml`).** ruff, then pytest with an 80% coverage floor, then a real BM25 + dense run on the
     SciFact test split on CPU and the gate. The Hugging Face cache, data and index are cached with `actions/cache`. The
     re-rank arm is **local-only** (100 cross-encoder passes x 300 queries is too slow on a free CPU runner).
 11. **API (`api.py`).** Indexes and models load once in the FastAPI lifespan. Endpoints are plain `def`, not `async def`:
     the work is CPU/GPU-bound and blocking, so FastAPI runs it in its threadpool instead of freezing the event loop.
     pydantic validates `q`, `k` and `arm` and returns 422 on bad input.
-12. **Tests (`tests/`).** They need no downloads and take one to three minutes, mostly numba JIT compilation inside ranx: a 5-doc fixture corpus, a hashed bag-of-words
+12. **Tests (`tests/`).** They need no downloads and took about 2 minutes here ([results/pytest.log](results/pytest.log); longer when the machine
+    is busy), mostly numba JIT compilation inside ranx: a 5-doc fixture corpus, a hashed bag-of-words
     fake encoder and a word-overlap fake cross-encoder exercise the real BM25, FAISS, RRF, ranx, pipeline, API and gate
     code. The nDCG test checks ranx against a hand-computed value; the gate test checks a 0.03 drop fails and a 0.01 drop
     passes.
@@ -362,7 +392,11 @@ Design decisions, in the order the data flows. Each one is a choice I can defend
 - Caveat: ranx runs the Fisher test in parallel numba threads, and the seed does not make that bit-reproducible. Across
   my runs the Fisher p-values moved by about 0.01 (e.g. dense vs BM25 0.029 in one run, 0.031 in the next). No
   significance conclusion changed. The t-test p-values are exact and stable.
-- Latency is not reproducible to the millisecond on a shared laptop; treat the ratios between arms as the result.
+- An independent re-run (fresh venv, fresh data download, fresh corpus encode) reproduced every `runs/*.json`,
+  `results/errors.json` and `results/rrf_tuning.json` byte for byte and passed the gate
+  ([results/rerun/compare_and_gate.log](results/rerun/compare_and_gate.log)).
+- Latency is not reproducible on a shared laptop: dense p50 was 113 ms in one run and 28 ms in another. Compare arms
+  within a run.
 - Versions: see `requirements.txt` and `results/results.json -> environment`. Dataset and model revisions are pinned in
   `ragbench/config.py`.
 - GPU: RTX 3050 Ti Laptop (4 GB), CUDA 11.8 build of torch 2.3.1. fp16 on GPU and fp32 on CPU give slightly different
@@ -391,10 +425,10 @@ The baseline comes from fp16 on the GPU; the CI job runs bge-small in fp32 on a 
 - **Latency is from a shared laptop GPU.** During the runs the GPU was also used by a local Ollama LLM server and another
   Python evaluation job (see the process list in [results/dense_query_profile.log](results/dense_query_profile.log)),
   so the GPU numbers are noisy and pessimistic. A single process with batch size 1; this is not a load test.
-- **The dense `/search` p95 < 100 ms target was not met** (server p95 150.4 ms on the shared GPU). I did not get
-  a run with the GPU to myself, so I cannot say whether it would be met on an idle GPU.
-- **CI has not run on GitHub yet** (the repo is not published). The workflow's steps were run locally on CPU (results
-  above), not on an Actions runner.
+- **The dense `/search` p95 < 100 ms target is not reliably met** on this shared GPU: server p95 150.4 ms in run 1,
+  67.0 ms in the re-run. I did not get a run with the GPU to myself.
+- **CI has not run on GitHub yet** (the repo is not published). Locally I ran its ruff, pytest and gate steps, but the
+  evaluation step ran on the GPU (fp16, and an fp32 check), not as the full CPU run CI would do (see the CPU check above).
 - The Docker image was written but **not built on this machine** (Docker is not installed here).
 - The re-ranker is a general MS MARCO model; a biomedical cross-encoder or a larger bge-reranker may change the
   re-rank conclusion. Fine-tuning on the SciFact train split is another option.

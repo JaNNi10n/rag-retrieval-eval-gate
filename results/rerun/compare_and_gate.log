@@ -1,0 +1,14 @@
+Byte comparison of the re-run outputs with the committed ones (cmp):
+runs/bm25.json identical
+runs/dense.json identical
+runs/hybrid.json identical
+runs/rerank.json identical
+results/errors.json identical
+results/rrf_tuning.json identical
+$ python -m ragbench gate --baseline results/baseline.json --results results/rerun/results.json --tol 0.02
+PASS bm25: ndcg@10 0.6762 vs baseline 0.6762 (delta -0.0000, tol 0.02)
+PASS dense: ndcg@10 0.7127 vs baseline 0.7127 (delta -0.0000, tol 0.02)
+PASS hybrid: ndcg@10 0.7267 vs baseline 0.7267 (delta +0.0000, tol 0.02)
+PASS rerank: ndcg@10 0.6868 vs baseline 0.6868 (delta +0.0000, tol 0.02)
+GATE PASSED
+exit=0

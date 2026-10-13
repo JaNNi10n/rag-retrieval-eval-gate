@@ -1,0 +1,21 @@
+Independent re-run, 2026-10-13, fresh venv (python -m venv --system-site-packages + pip install -r requirements*.txt),
+fresh data download and fresh dense encode (RAGBENCH_DATA_DIR / RAGBENCH_INDEX_DIR pointed at empty directories).
+Progress bars and a torch flash-attention UserWarning are stripped from this copy of the log.
+$ python -m ragbench run --arms bm25,dense,hybrid,rerank --split test --out <scratch>/results --runs-dir <scratch>/runs
+[data] 5183 docs, 300 test queries (3.5s)
+[dense] index ready in 33.48s
+[hybrid] RRF k tuned on train: {10: 0.760109873785094, 30: 0.7541049307648822, 60: 0.7515919782751525, 100: 0.7507788141738606} -> k=10
+[rerank] 300 queries x 100 candidates in 138.03s
+[bm25] ndcg@10=0.6762, recall@100=0.9127, mrr@10=0.6413, p50=1.69ms p95=2.18ms
+[dense] ndcg@10=0.7127, recall@100=0.9417, mrr@10=0.6822, p50=28.49ms p95=45.8ms
+[hybrid] ndcg@10=0.7267, recall@100=0.9650, mrr@10=0.6904, p50=31.57ms p95=49.3ms
+[rerank] ndcg@10=0.6868, recall@100=0.9650, mrr@10=0.6575, p50=437.82ms p95=560.56ms
+| Arm | nDCG@10 | Recall@100 | MRR@10 | p (t-test vs BM25) | p (Fisher vs BM25) | p50 ms | p95 ms | Device |
+|---|---|---|---|---|---|---|---|---|
+| bm25 | 0.6762 | 0.9127 | 0.6413 | baseline | baseline | 1.69 | 2.18 | cpu |
+| dense | 0.7127 | 0.9417 | 0.6822 | 0.031 * | 0.029 * | 28.49 | 45.8 | cuda |
+| hybrid | 0.7267 | 0.9650 | 0.6904 | 1.7e-06 * | <1e-04 * | 31.57 | 49.3 | cpu + cuda |
+| rerank | 0.6868 | 0.9650 | 0.6575 | 0.49 | 0.49 | 437.82 | 560.56 | cpu + cuda |
+Split: test (300 queries, 5183 docs). RRF k = 10 (tuned on train). `*` = p < 0.05.
+best arm: hybrid
+exit=0
