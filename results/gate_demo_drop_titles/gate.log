@@ -1,0 +1,19 @@
+branch: demo/drop-doc-titles @ ae1e5d1
+$ python -m ragbench run --arms bm25,dense --split test --no-latency
+[data] 5183 docs, 300 test queries (0.5s)
+[dense] index ready in 45.49s
+[bm25] ndcg@10=0.6595, recall@100=0.9010, mrr@10=0.6235
+[dense] ndcg@10=0.6968, recall@100=0.9483, mrr@10=0.6576
+| Arm | nDCG@10 | Recall@100 | MRR@10 | p (t-test vs BM25) | p (Fisher vs BM25) | p50 ms | p95 ms | Device |
+|---|---|---|---|---|---|---|---|---|
+| bm25 | 0.6595 | 0.9010 | 0.6235 | baseline | baseline | - | - | cpu |
+| dense | 0.6968 | 0.9483 | 0.6576 | 0.036 * | 0.036 * | - | - | cuda |
+
+Split: test (300 queries, 5183 docs). RRF k = None (tuned on train). `*` = p < 0.05.
+
+best arm: dense
+$ python -m ragbench gate --baseline results/baseline.json --arms bm25,dense --tol 0.02
+PASS bm25: ndcg@10 0.6595 vs baseline 0.6762 (delta -0.0167, tol 0.02)
+PASS dense: ndcg@10 0.6968 vs baseline 0.7127 (delta -0.0159, tol 0.02)
+GATE PASSED
+exit=0

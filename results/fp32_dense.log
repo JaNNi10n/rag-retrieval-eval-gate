@@ -1,0 +1,15 @@
+[data] 5183 docs, 300 test queries (0.2s)
+
+
+
+
+
+
+[dense] index ready in 875.56s
+
+[bm25] ndcg@10=0.6762, recall@100=0.9127, mrr@10=0.6413
+
+[dense] ndcg@10=0.7127, recall@100=0.9417, mrr@10=0.6822
+
+{'bm25': 0.6762, 'dense': 0.7127}
+

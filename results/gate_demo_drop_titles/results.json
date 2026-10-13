@@ -1,0 +1,52 @@
+{
+ "dataset": "BEIR SciFact",
+ "split": "test",
+ "n_queries": 300,
+ "n_docs": 5183,
+ "rrf_k": null,
+ "significance": {
+  "baseline": "bm25",
+  "metric": "ndcg@10",
+  "tests": [
+   "paired t-test",
+   "Fisher randomisation"
+  ],
+  "fisher_permutations": 10000,
+  "seed": 42,
+  "alpha": 0.05
+ },
+ "environment": {
+  "python": "3.12.10",
+  "os": "Windows 10",
+  "cpu": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "device": "cuda",
+  "torch": "2.3.1+cu118",
+  "sentence_transformers": "5.7.0",
+  "faiss": "1.15.1",
+  "bm25s": "0.3.13",
+  "ranx": "0.3.21",
+  "numpy": "1.26.4",
+  "gpu": "NVIDIA GeForce RTX 3050 Ti Laptop GPU"
+ },
+ "timings": {
+  "bm25_index_s": 4.82,
+  "dense_index_build_or_load_s": 45.49
+ },
+ "arms": {
+  "bm25": {
+   "ndcg@10": 0.6594985464214759,
+   "recall@100": 0.901,
+   "mrr@10": 0.6235264550264551,
+   "device": "cpu"
+  },
+  "dense": {
+   "ndcg@10": 0.6967682735146006,
+   "recall@100": 0.9483333333333334,
+   "mrr@10": 0.6576349206349206,
+   "device": "cuda",
+   "p_student": 0.03584345080194107,
+   "p_fisher": 0.0364
+  }
+ },
+ "best_arm": "dense"
+}

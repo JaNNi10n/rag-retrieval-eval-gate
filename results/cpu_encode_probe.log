@@ -1,0 +1,4 @@
+$ RAGBENCH_DEVICE=cpu: encode the first 128 SciFact docs with bge-small fp32 on CPU (batch 16)
+torch threads 8
+shape (128, 384) seconds 147.0 docs/s 0.87 projected full corpus min 99.2
+exit=0

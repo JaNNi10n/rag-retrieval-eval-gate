@@ -1,0 +1,19 @@
+branch: demo/truncate-docs-128-tokens @ 72024f7
+$ python -m ragbench run --arms bm25,dense --split test --no-latency
+[data] 5183 docs, 300 test queries (0.2s)
+[dense] index ready in 8.3s
+[bm25] ndcg@10=0.6762, recall@100=0.9127, mrr@10=0.6413
+[dense] ndcg@10=0.6803, recall@100=0.9383, mrr@10=0.6499
+| Arm | nDCG@10 | Recall@100 | MRR@10 | p (t-test vs BM25) | p (Fisher vs BM25) | p50 ms | p95 ms | Device |
+|---|---|---|---|---|---|---|---|---|
+| bm25 | 0.6762 | 0.9127 | 0.6413 | baseline | baseline | - | - | cpu |
+| dense | 0.6803 | 0.9383 | 0.6499 | 0.83 | 0.83 | - | - | cuda |
+
+Split: test (300 queries, 5183 docs). RRF k = None (tuned on train). `*` = p < 0.05.
+
+best arm: dense
+$ python -m ragbench gate --baseline results/baseline.json --arms bm25,dense --tol 0.02
+PASS bm25: ndcg@10 0.6762 vs baseline 0.6762 (delta -0.0000, tol 0.02)
+FAIL dense: ndcg@10 0.6803 vs baseline 0.7127 (delta -0.0324, tol 0.02)
+GATE FAILED
+exit=1

@@ -1,0 +1,3 @@
+[dense] index ready in 21.09s
+[bm25] ndcg@10=0.6945, recall@100=0.9264, mrr@10=0.6631
+[dense] ndcg@10=0.7469, recall@100=0.9652, mrr@10=0.7136

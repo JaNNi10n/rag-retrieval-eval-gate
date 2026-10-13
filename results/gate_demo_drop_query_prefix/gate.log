@@ -1,0 +1,19 @@
+branch: demo/drop-bge-query-prefix @ f47492f
+$ python -m ragbench run --arms bm25,dense --split test --no-latency
+[data] 5183 docs, 300 test queries (0.2s)
+[dense] index ready in 0.02s
+[bm25] ndcg@10=0.6762, recall@100=0.9127, mrr@10=0.6413
+[dense] ndcg@10=0.7200, recall@100=0.9533, mrr@10=0.6845
+| Arm | nDCG@10 | Recall@100 | MRR@10 | p (t-test vs BM25) | p (Fisher vs BM25) | p50 ms | p95 ms | Device |
+|---|---|---|---|---|---|---|---|---|
+| bm25 | 0.6762 | 0.9127 | 0.6413 | baseline | baseline | - | - | cpu |
+| dense | 0.7200 | 0.9533 | 0.6845 | 0.014 * | 0.014 * | - | - | cuda |
+
+Split: test (300 queries, 5183 docs). RRF k = None (tuned on train). `*` = p < 0.05.
+
+best arm: dense
+$ python -m ragbench gate --baseline results/baseline.json --arms bm25,dense --tol 0.02
+PASS bm25: ndcg@10 0.6762 vs baseline 0.6762 (delta -0.0000, tol 0.02)
+PASS dense: ndcg@10 0.7200 vs baseline 0.7127 (delta +0.0073, tol 0.02)
+GATE PASSED
+exit=0
